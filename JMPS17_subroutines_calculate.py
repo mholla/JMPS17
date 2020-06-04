@@ -27,27 +27,27 @@ def det_growth(g1, g2, g3, beta, kh):
     If the determinant is too large to compute, returns None.
     """
 
-    LAMBDA = 1. / g1**2. + g1**2. * g3**2.
+    LAMBDA = 1. / g1 ** 2. + g1 ** 2. * g3 ** 2.
     AA = numpy.zeros((4, 4), dtype='float64')
 
     # Eq. 38 in paper
     try:
-        AA[0][0] = 2. * (beta * g1**2. * g3**2. + 1.)
-        AA[0][1] = 2. * (beta * g1**2. * g3**2. - 1.)
-        AA[0][2] = beta * LAMBDA + 2. / g1**2. / g3
-        AA[0][3] = beta * LAMBDA - 2. / g1**2. / g3
+        AA[0][0] = 2. * (beta * g1 ** 2. * g3 ** 2. + 1.)
+        AA[0][1] = 2. * (beta * g1 ** 2. * g3 ** 2. - 1.)
+        AA[0][2] = beta * LAMBDA + 2. / g1 ** 2. / g3
+        AA[0][3] = beta * LAMBDA - 2. / g1 ** 2. / g3
         AA[1][0] = 2. + beta * LAMBDA
         AA[1][1] = 2. - beta * LAMBDA
         AA[1][2] = 2. * (1. + beta * g3)
         AA[1][3] = 2. * (1. - beta * g3)
-        AA[2][0] = 2. * g1**2. * g3**2. * exp(-kh * g1 * g2 * g3)
-        AA[2][1] = 2. * g1**2. * g3**2. * exp(kh * g1 * g2 * g3)
-        AA[2][2] = LAMBDA * exp(-kh * g2 / g1)
-        AA[2][3] = LAMBDA * exp(kh * g2 / g1)
+        AA[2][0] = 2. * g1 ** 2. * g3 ** 2. * exp(-kh * g1 * g2 * g3)
+        AA[2][1] = 2. * g1 ** 2. * g3 ** 2. * exp(+kh * g1 * g2 * g3)
+        AA[2][2] = +LAMBDA * exp(-kh * g2 / g1)
+        AA[2][3] = +LAMBDA * exp(+kh * g2 / g1)
         AA[3][0] = -LAMBDA * exp(-kh * g1 * g2 * g3)
-        AA[3][1] = LAMBDA * exp(kh * g1 * g2 * g3)
+        AA[3][1] = +LAMBDA * exp(+kh * g1 * g2 * g3)
         AA[3][2] = -2. * g3 * exp(-kh * g2 / g1)
-        AA[3][3] = 2. * g3 * exp(kh * g2 / g1)
+        AA[3][3] = +2. * g3 * exp(+kh * g2 / g1)
 
         dd = numpy.linalg.det(AA)
 
@@ -96,31 +96,31 @@ def det_compression(d1, d3, beta, kh):
         AA[0][4] = -2.
         AA[0][5] = -LAMBDA * d1 ** 2. * d3 ** 2.
 
-        AA[1][0] = beta * LAMBDA * d3
+        AA[1][0] = +beta * LAMBDA * d3
         AA[1][1] = -beta * LAMBDA * d3
-        AA[1][2] = 2. * beta
+        AA[1][2] = +2. * beta
         AA[1][3] = -2. * beta
         AA[1][4] = LAMBDA * d3
         AA[1][5] = 2.
 
         AA[2][0] = 2. * exp(-kh / (d1 ** 2. * d3))
-        AA[2][1] = 2. * exp(kh / (d1 ** 2. * d3))
+        AA[2][1] = 2. * exp(+kh / (d1 ** 2. * d3))
         AA[2][2] = LAMBDA * d1 ** 2. * d3 ** 2. * exp(-kh)
-        AA[2][3] = LAMBDA * d1 ** 2. * d3 ** 2. * exp(kh)
+        AA[2][3] = LAMBDA * d1 ** 2. * d3 ** 2. * exp(+kh)
         AA[2][4] = 0.
         AA[2][5] = 0.
 
         AA[3][0] = -LAMBDA * d3 * exp(-kh / (d1 ** 2. * d3))
-        AA[3][1] = LAMBDA * d3 * exp(kh / (d1 ** 2. * d3))
+        AA[3][1] = +LAMBDA * d3 * exp(+kh / (d1 ** 2. * d3))
         AA[3][2] = -2. * exp(-kh)
-        AA[3][3] = 2. * exp(kh)
+        AA[3][3] = +2. * exp(+kh)
         AA[3][4] = 0.
         AA[3][5] = 0.
 
         AA[4][0] = -1.
-        AA[4][1] = 1.
+        AA[4][1] = +1.
         AA[4][2] = -d1 ** 2. * d3
-        AA[4][3] = d1 ** 2. * d3
+        AA[4][3] = +d1 ** 2. * d3
         AA[4][4] = -1.
         AA[4][5] = -d1 ** 2. * d3
 
@@ -128,8 +128,8 @@ def det_compression(d1, d3, beta, kh):
         AA[5][1] = -1.
         AA[5][2] = -1.
         AA[5][3] = -1.
-        AA[5][4] = 1.
-        AA[5][5] = 1.
+        AA[5][4] = +1.
+        AA[5][5] = +1.
 
         dd = numpy.linalg.det(AA)
 
@@ -262,7 +262,8 @@ def Ridder_growth(a, b, g1_function, g2_function, g3_function, beta, kh, tol=1.e
             return None, i
 
         dx = (c - a) * fc / s
-        if (fa - fb) < 0.0: dx = -dx
+        if (fa - fb) < 0.0:
+            dx = -dx
         x = c + dx
 
         g1x = g1_function(x)
@@ -279,13 +280,15 @@ def Ridder_growth(a, b, g1_function, g2_function, g3_function, beta, kh, tol=1.e
         # rebracket root
         if fc * fx > 0.0:
             if fa * fx < 0.0:
-                b = x; fb = fx
+                b = x
+                fb = fx
             else:
-                a = x; fa = fx
+                a = x
+                fa = fx
         else:
-            a = c;
-            b = x;
-            fa = fc;
+            a = c
+            b = x
+            fa = fc
             fb = fx
 
     print("Too many iterations")
@@ -354,7 +357,8 @@ def Ridder_compression(a, b, d1_function, d3_function, beta, kh, tol=1.e-12, nma
             return None, i
 
         dx = (c - a) * fc / s
-        if (fa - fb) < 0.0: dx = -dx
+        if (fa - fb) < 0.0:
+            dx = -dx
         x = c + dx
 
         d1x = d1_function(x)
@@ -370,13 +374,15 @@ def Ridder_compression(a, b, d1_function, d3_function, beta, kh, tol=1.e-12, nma
         # rebracket root
         if fc * fx > 0.0:
             if fa * fx < 0.0:
-                b = x; fb = fx
+                b = x
+                fb = fx
             else:
-                a = x; fa = fx
+                a = x
+                fa = fx
         else:
-            a = c;
-            b = x;
-            fa = fc;
+            a = c
+            b = x
+            fa = fc
             fb = fx
 
     res = abs(x - xOld) / max(abs(x), 1.0)
@@ -441,7 +447,8 @@ def Ridder_FvK(a, b, FvK_options, beta, kh, tol=1.e-12, nmax=50):
             return None, i
 
         dx = (c - a) * fc / s
-        if (fa - fb) < 0.0: dx = -dx
+        if (fa - fb) < 0.0:
+            dx = -dx
         x = c + dx
 
         fx = eval_FvK(x, beta, kh, FvK_options)
@@ -455,13 +462,15 @@ def Ridder_FvK(a, b, FvK_options, beta, kh, tol=1.e-12, nmax=50):
         # rebracket root
         if fc * fx > 0.0:
             if fa * fx < 0.0:
-                b = x; fb = fx
+                b = x
+                fb = fx
             else:
-                a = x; fa = fx
+                a = x
+                fa = fx
         else:
-            a = c;
-            b = x;
-            fa = fc;
+            a = c
+            b = x
+            fa = fc
             fb = fx
 
     res = abs(x - xOld) / max(abs(x), 1.0)
@@ -786,7 +795,6 @@ def find_roots(root_exists, mode, crit_strains, a, b, c, beta, kh, printoutput, 
         if printoutput: print("lam = {lam:0.5f}, n = {n}".format(lam=lam1, n=n))
     else:
         lam1 = 1.
-        n = 1.
         if printoutput: print("L/H = {wavelength:0.2f}, no root".format(wavelength=2. * pi / kh))
 
     crit_strains.append(1. - lam1)
@@ -794,7 +802,8 @@ def find_roots(root_exists, mode, crit_strains, a, b, c, beta, kh, printoutput, 
     return crit_strains, b
 
 
-def find_critical_values(mode, beta, wavelengths, lam_min, lam_max, npts, plotroots, findroots, printoutput, plotindcurves, tol=1.e-12):
+def find_critical_values(mode, beta, wavelengths, lam_min, lam_max, npts, plotroots, findroots, printoutput,
+                         plotindcurves, tol=1.e-12):
     """ Finds critical strain for each specified wavelength
 
     Parameters
@@ -860,7 +869,6 @@ def find_critical_values(mode, beta, wavelengths, lam_min, lam_max, npts, plotro
 
     if findroots:
         # remove zero-strain results
-        strains_all = numpy.array(strains)
         strains_masked = numpy.ma.masked_equal(strains, 0)
         zeromask = numpy.ma.getmask(strains_masked)
         wavelengths_masked = numpy.ma.array(wavelengths, mask=zeromask)
@@ -937,15 +945,14 @@ def find_min_crit_strain(wavelengths, crit_strains):
     return min_wavelength, min_strain
 
 
-def find_threshold_values(beta, mode, crit_strains_all, crit_wavelengths_all, min_strains, min_wavelengths, min_betas, max_strains, max_wavelengths, max_betas, findroots): 
+def find_threshold_values(beta, crit_strains_all, crit_wavelengths_all, min_strains, min_wavelengths, min_betas,
+                          max_strains, max_wavelengths, max_betas, findroots):
     """ find the threshold (min and max) critical min_strains, and corresponding wavelengths and stiffness ratios
 
     Parameters
     ----------
     beta : float
         stiffness ratio (film/substrate) 
-    mode : string
-        type of loading, from 'prestretch1D', 'prestretch2D', 'unidirectional' , 'surface', 'isotropic', 'plane', 'uniaxial', 'biaxial', 'compression', 'growth'
     crit_strains_all : list of floats
         list of critical min_strains associated with each wavelength
     crit_wavelengths_all : list of floats
@@ -1028,5 +1035,8 @@ def write_threshold_values(filename, thresh_strains, thresh_wavelengths, betas):
 
     with open(filename, 'w') as data_file:
         for i in range(len(thresh_strains)):
-            data_file.write('{beta:.4f}\t{strain:.4f}\t{wavelength:.4f}\n'.format(beta=betas[i], strain=thresh_strains[i],
-                                                                                  wavelength=thresh_wavelengths[i]))
+            data_file.write('{beta:.4f}\t{strain:.4f}\t{wavelength:.4f}\n'.format(
+                beta=betas[i],
+                strain=thresh_strains[i],
+                wavelength=thresh_wavelengths[i])
+            )

@@ -1,6 +1,7 @@
-import numpy
-from math import *
 import warnings
+from math import *
+
+import numpy
 
 warnings.simplefilter('ignore')
 
@@ -22,11 +23,10 @@ def set_mode_info(mode):
     functions : list
         list of function names that specify amount of growth or compression in terms of axial compression, lambda
     """
-    
+
     # g1 and lam1 are common between all load cases
     g1_function = g_g
     d1_function = d_lam
-    
 
     if mode == 'prestretch1D':
         loadcolor = '#3E8239'
@@ -52,31 +52,32 @@ def set_mode_info(mode):
         loadcolor = '#E02E52'
         d3_function = d_one
     elif mode == 'uniaxial':
-        loadcolor = '#EF790F' 
+        loadcolor = '#EF790F'
         d3_function = d_inverse
     elif mode == 'biaxial':
         loadcolor = '#DFC223'
         d3_function = d_lam
-    elif mode.split()[1] == 'original': 
-        loadcolor = '#D3D3D3' 
+    elif mode.split()[1] == 'original':
+        loadcolor = '#D3D3D3'
     elif mode.split()[0] == 'FvK_compression':
         loadcolor = '#A20E0E'
     elif mode.split()[0] == 'FvK_growth':
         loadcolor = '#0C0C57'
-    else: 
+    else:
         loadcolor = 'k'
 
     if mode in ['prestretch1D', 'prestretch2D', 'unidirectional', 'isotropic', 'surface']:
         mode_type = 'growth'
-        functions = [g1_function, g2_function, g3_function] 
+        functions = [g1_function, g2_function, g3_function]
     elif mode in ['plane', 'uniaxial', 'biaxial']:
         mode_type = 'compression'
         functions = [d1_function, d3_function]
-    else: 
+    else:
         mode_type = 'FvK'
         functions = mode
 
     return mode_type, loadcolor, functions
+
 
 def g_g(lam):
     """ Calculate g = 1/lambda (used in growth and prestretch modes)
@@ -90,10 +91,11 @@ def g_g(lam):
     -------
     g : float
         value of g
-    """  
+    """
 
-    g = 1./lam
+    g = 1. / lam
     return g
+
 
 def g_one(lam):
     """ Calculate g = 1 (used in growth and prestretch modes)
@@ -107,10 +109,11 @@ def g_one(lam):
     -------
     g : float
         value of g
-    """  
+    """
 
-    g = 1. 
+    g = 1.
     return g
+
 
 def g_inverse(lam):
     """ Calculate g = lambda (used in 1D prestretch mode)
@@ -124,10 +127,11 @@ def g_inverse(lam):
     -------
     g : float
         value of g
-    """  
+    """
 
     g = lam
     return g
+
 
 def g_inverse2(lam):
     """ Calculate g = lambda^2 (used in 2D prestretch mode)
@@ -141,10 +145,11 @@ def g_inverse2(lam):
     -------
     g : float
         value of g
-    """  
-    
-    g = lam**2.    
+    """
+
+    g = lam ** 2.
     return g
+
 
 def d_lam(lam):
     """ Calculate d = lambda (used in biaxial compression mode)
@@ -158,10 +163,11 @@ def d_lam(lam):
     -------
     d : float
         value of d
-    """  
+    """
 
     d = lam
     return d
+
 
 def d_one(lam):
     """ Calculate d = 1 (used in plane compression mode)
@@ -175,10 +181,11 @@ def d_one(lam):
     -------
     d : float
         value of d
-    """  
+    """
 
     d = 1.
     return d
+
 
 def d_inverse(lam):
     """ Calculate d = 1/sqrt(lam) (used in uniaxial compression mode)
@@ -192,10 +199,11 @@ def d_inverse(lam):
     -------
     d : float
         value of d
-    """  
+    """
 
-    d = 1./sqrt(lam)
+    d = 1. / sqrt(lam)
     return d
+
 
 def calc_eff_strain(mode_type, functions, strains):
     """ Calculate effective strain for the given mode_type and min_strains
@@ -221,7 +229,7 @@ def calc_eff_strain(mode_type, functions, strains):
         g_3 = functions[2]
     elif mode_type == 'buckling':
         return strains
-    elif mode_type == 'compression': 
+    elif mode_type == 'compression':
         d_3 = functions[1]
         g_3 = g_one
 
@@ -230,12 +238,13 @@ def calc_eff_strain(mode_type, functions, strains):
 
     for i in range(len(stretches)):
         lam1 = stretches[i]
-        lam3 = d_3(lam1)/g_3(lam1)
-        
+        lam3 = d_3(lam1) / g_3(lam1)
+
         # Equation found in section 4.3
         strain_eff[i] = 1. - lam1 * sqrt(lam3)
 
     return strain_eff
+
 
 def calc_eff_stiffness(mode_type, functions, strains, betas):
     """ Calculate effective stiffness for the given mode_type, min_strains, and stiffness ratios
@@ -260,21 +269,22 @@ def calc_eff_stiffness(mode_type, functions, strains, betas):
 
     if mode_type == 'growth':
         [g_1, g_2, g_3] = functions
-    else: # whole-domain compression does not change stiffness ratio
+    else:  # whole-domain compression does not change stiffness ratio
         return betas
-    
+
     stretches = 1. - numpy.array(strains)
     beta_eff = numpy.zeros(len(betas))
 
     for i in range(len(betas)):
         lam = stretches[i]
-        lam1 = 1/g_1(lam)
-        lam3 = 1/g_3(lam)
+        lam1 = 1 / g_1(lam)
+        lam3 = 1 / g_3(lam)
 
         # Equation found in section 4.3
-        beta_eff[i] = betas[i]*(lam1**2. + (lam1*lam3)**(-2.))/2.
+        beta_eff[i] = betas[i] * (lam1 ** 2. + (lam1 * lam3) ** (-2.)) / 2.
 
     return beta_eff
+
 
 def calc_eff_wavelength(mode_type, functions, strains, wavelengths):
     """ Calculate effective eff_wavelength for the given mode_type, min_strains, and wavelengths
@@ -300,10 +310,10 @@ def calc_eff_wavelength(mode_type, functions, strains, wavelengths):
     if mode_type == 'growth':
         [g_1, g_2, g_3] = functions
         [d_1, d_3] = [d_one, d_one]
-    else: 
+    else:
         [g_1, g_2, g_3] = [d_one, d_one, d_one]
         [d_1, d_3] = functions
-    
+
     stretches = 1. - numpy.array(strains)
     wavelength_eff = numpy.zeros(len(wavelengths))
 
@@ -316,9 +326,10 @@ def calc_eff_wavelength(mode_type, functions, strains, wavelengths):
         d3 = d_3(lam)
 
         # Equation found in section 4.3
-        wavelength_eff[i] = wavelengths[i]*d1*d1*d3/(g1*g2*g3)
+        wavelength_eff[i] = wavelengths[i] * d1 * d1 * d3 / (g1 * g2 * g3)
 
     return wavelength_eff
+
 
 def calc_axial_pressure(mode, strains):
     """ Calculates axial or Biot pressure generated by a given strain
@@ -359,7 +370,7 @@ def calc_axial_pressure(mode, strains):
         elif mode.split()[0] == 'growth':
             g_1 = g_g
             d_1 = d_one
-    elif mode_type == 'compression': 
+    elif mode_type == 'compression':
         g_1 = g_one
         g_2 = g_one
         g_3 = g_one
@@ -374,9 +385,10 @@ def calc_axial_pressure(mode, strains):
         d3 = d_3(stretches[i])
 
         # Eq. 39
-        P_biot[i] = -(d1**2. / g1**2. - g1**2. * g3**2. / (d1**2. * d3**2.))/(g1 * g2 * g3)
-        
-    return P_biot 
+        P_biot[i] = -(d1 ** 2. / g1 ** 2. - g1 ** 2. * g3 ** 2. / (d1 ** 2. * d3 ** 2.)) / (g1 * g2 * g3)
+
+    return P_biot
+
 
 def calc_hydro_pressure(mode, strains):
     """ 
@@ -400,7 +412,6 @@ def calc_hydro_pressure(mode, strains):
 
     [mode_type, loadcolor, functions] = set_mode_info(mode)
 
-    n = len(strains)
     stretches = numpy.array(1. - numpy.array(strains))
     P_hydro = numpy.zeros(len(strains))
 
@@ -420,7 +431,7 @@ def calc_hydro_pressure(mode, strains):
         elif mode.split()[0] == 'growth':
             g_1 = g_g
             d_1 = d_one
-    elif mode_type == 'compression': 
+    elif mode_type == 'compression':
         g_1 = g_one
         g_2 = g_one
         g_3 = g_one
@@ -434,12 +445,12 @@ def calc_hydro_pressure(mode, strains):
         d1 = d_1(stretches[i])
         d3 = d_3(stretches[i])
 
-        lam1 = d1/g1
-        lam3 = d3/g3
-        lam2 = 1./lam1/lam3
-        J = g1*g2*g3
+        lam1 = d1 / g1
+        lam3 = d3 / g3
+        lam2 = 1. / lam1 / lam3
+        J = g1 * g2 * g3
 
         # Eq. 40
-        P_hydro[i] = -(lam1**2 + lam3**2. - 2*lam2**2.)/(3.*J)
-        
-    return P_hydro 
+        P_hydro[i] = -(lam1 ** 2 + lam3 ** 2. - 2 * lam2 ** 2.) / (3. * J)
+
+    return P_hydro

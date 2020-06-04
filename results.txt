@@ -1,32 +1,32 @@
 biaxial 
 zero wavelength instability occurs at strain = 0.3339, at and below b = 1.0000 
-infinitesmial cusped sulci occur at strain = 0.2472, at and below b = 1.5151 
+infinitesimal cusped sulci occur at strain = 0.2472, at and below b = 1.5151 
 
 uniaxial 
 zero wavelength instability occurs at strain = 0.5563, at and below b = 1.0000 
-infinitesmial cusped sulci occur at strain = 0.4332, at and below b = 1.5151 
+infinitesimal cusped sulci occur at strain = 0.4332, at and below b = 1.5151 
 
 plane 
 zero wavelength instability occurs at strain = 0.4563, at and below b = 1.0000 
-infinitesmial cusped sulci occur at strain = 0.3468, at and below b = 1.5151 
+infinitesimal cusped sulci occur at strain = 0.3468, at and below b = 1.5151 
 
 prestretch1D 
 zero wavelength instability occurs at strain = 0.4563, at and below b = 0.5248 
-infinitesmial cusped sulci occur at strain = 0.3455, at and below b = 1.1494 
+infinitesimal cusped sulci occur at strain = 0.3455, at and below b = 1.1494 
 
 prestretch2D 
 zero wavelength instability occurs at strain = 0.3339, at and below b = 0.3311 
-infinitesmial cusped sulci occur at strain = 0.2455, at and below b = 0.8719 
+infinitesimal cusped sulci occur at strain = 0.2455, at and below b = 0.8719 
 
 unidirectional 
 zero wavelength instability occurs at strain = 0.4563, at and below b = 0.5248 
-infinitesmial cusped sulci occur at strain = 0.3455, at and below b = 1.1494 
+infinitesimal cusped sulci occur at strain = 0.3455, at and below b = 1.1494 
 
 surface 
 zero wavelength instability occurs at strain = 0.3339, at and below b = 0.3311 
-infinitesmial cusped sulci occur at strain = 0.2455, at and below b = 0.8719 
+infinitesimal cusped sulci occur at strain = 0.2455, at and below b = 0.8719 
 
 isotropic 
 zero wavelength instability occurs at strain = 0.3339, at and below b = 0.3311 
-infinitesmial cusped sulci occur at strain = 0.2455, at and below b = 0.8719 
+infinitesimal cusped sulci occur at strain = 0.2455, at and below b = 0.8719 
 

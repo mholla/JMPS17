@@ -20,13 +20,13 @@ def other_analytical(betas):
     """
 
     # In Cai & Fu 1999, they denote the stiffness ratio (substrate/film) as r
-    rs = 1./betas
+    rs = 1. / betas
 
     # Eq. 3.25 in Cai & Fu 1999
-    stretches = 1. - (3.*rs)**(2./3.)/4. + 33.*rs/160.*(3.*rs)**(1./3.)
-    khs = (3.*rs)**(1./3.) + 3.*rs/20.
-    
-    lhs = 2.*pi/khs
+    stretches = 1. - (3. * rs) ** (2. / 3.) / 4. + 33. * rs / 160. * (3. * rs) ** (1. / 3.)
+    khs = (3. * rs) ** (1. / 3.) + 3. * rs / 20.
+
+    lhs = 2. * pi / khs
     strains = 1. - stretches
 
     plt.figure('10A')
@@ -36,6 +36,7 @@ def other_analytical(betas):
     plt.figure('10B')
     plt.plot(betas, lhs, color='#ffd700', linewidth=3, linestyle='--', zorder=1)
     data_wavelength('10B', color=False)
+
 
 def datapoints():
     """ Call other functions to add datapoints to figures
@@ -55,7 +56,8 @@ def datapoints():
     data_eff_wavelength()
     data_eff_strain()
 
-def data_Tallinen2015(figno=None, plot=False): 
+
+def data_Tallinen2015(figno=None, plot=False):
     """ Calculate wavelengths and
 
     Parameters
@@ -77,27 +79,36 @@ def data_Tallinen2015(figno=None, plot=False):
     # calculations for Tallinen et al 2015 (doi 10.1103/PhysRevE.92.022720)
     beta = numpy.array([0.86, 3, 6, 10])
     # Tallinen et al 2015, Fig. 4d (zig zags)
-    g1  = numpy.array([1.6680328, 1.3196721, 1.2110655, 1.1495901])
+    g1 = numpy.array([1.6680328, 1.3196721, 1.2110655, 1.1495901])
     lh1 = numpy.array([3.1440163, 4.0162272, 5.5172415, 6.572008])
-    g2  = numpy.array([1.6680328, 1.3217213, 1.2090164, 1.1495901])
-    lh2 = numpy.array([3.1845841, 5.233266,  7.7079105, 9.817444])
+    g2 = numpy.array([1.6680328, 1.3217213, 1.2090164, 1.1495901])
+    lh2 = numpy.array([3.1845841, 5.233266, 7.7079105, 9.817444])
     # Tallinen et al 2015, Fig. 4d (triple junctions)
-    g3  = numpy.array([1.6721171, 1.3234556, 1.2116568, 1.1548723])
-    lh3 = numpy.array([3.3809805, 4.9423223, 7.1327753, 8.89265]) 
+    g3 = numpy.array([1.6721171, 1.3234556, 1.2116568, 1.1548723])
+    lh3 = numpy.array([3.3809805, 4.9423223, 7.1327753, 8.89265])
 
     betas = numpy.concatenate((beta, beta, beta))
     gs = numpy.concatenate((g1, g2, g3))
-    strains = 1. - 1./gs
+    strains = 1. - 1. / gs
     wavelengths = numpy.concatenate((lh1, lh2, lh3))
 
     # add data to Figs. 4 and 9
-    if plot: 
+    if plot:
         plt.figure('{figno}_{subfigno}_{mode}'.format(figno=figno, subfigno=4, mode='prestretch2D'))
-        plt.semilogx(wavelengths, strains, linestyle='', color=set_mode_info('prestretch2D')[1], markeredgecolor='k', marker='*', markersize=10)
+        plt.semilogx(
+            wavelengths,
+            strains,
+            linestyle='',
+            color=set_mode_info('prestretch2D')[1],
+            markeredgecolor='k',
+            marker='*',
+            markersize=10
+        )
 
     return betas, strains, wavelengths
 
-def data_strains(figname, color=True): 
+
+def data_strains(figname, color=True):
     """ add strain datapoints to Fig 5A
 
     Parameters
@@ -112,17 +123,17 @@ def data_strains(figname, color=True):
     None
 
     """
-    
-    plt.figure(figname) 
 
-    if color: 
+    plt.figure(figname)
+
+    if color:
         color_plane = set_mode_info('plane')[1]
         color_uniaxial = set_mode_info('uniaxial')[1]
         color_biaxial = set_mode_info('biaxial')[1]
         color_surface = set_mode_info('surface')[1]
         color_prestretch1D = set_mode_info('prestretch1D')[1]
         color_isotropic = set_mode_info('isotropic')[1]
-    else: 
+    else:
         color_plane = 'lightgray'
         color_uniaxial = 'lightgray'
         color_biaxial = 'lightgray'
@@ -133,7 +144,7 @@ def data_strains(figname, color=True):
     # Cao & Hutchinson 2012 (numerical, plane compression)
     plt.semilogx(5., 0.175, color=color_plane, markeredgecolor='k', marker='*', markersize=10)
     plt.semilogx(30., 0.055, color=color_plane, markeredgecolor='k', marker='*', markersize=10)
-    
+
     # Brau et al. 2011 (experimental, plane)
     plt.semilogx(120., 0.17, color=color_plane, markeredgecolor='k', marker='*', markersize=10)
 
@@ -146,20 +157,20 @@ def data_strains(figname, color=True):
     plt.semilogx(4., 0.210, color=color_uniaxial, markeredgecolor='k', marker='*', markersize=10)
     # Jin et al. 2015 (numerical, subcritical crease)
     plt.semilogx(1.4, 0.36, color=color_plane, markeredgecolor='k', marker='^', markersize=8)
-    
+
     # Hong et al. 2009 (numeric, plane creasing)
     plt.semilogx(1., 0.35, color=color_plane, markeredgecolor='k', marker='^', markersize=8)
     # Hong et al. 2009 (numeric, uniaxial creasing)
     plt.semilogx(1., 0.436, color=color_uniaxial, markeredgecolor='k', marker='^', markersize=8)
     # Hong et al. 2009 (numeric, biaxial creasing)
     plt.semilogx(1., 0.249, color=color_biaxial, markeredgecolor='k', marker='^', markersize=8)
-    
+
     # Huang et al. 2005 (numerical, biaxial)
     plt.semilogx(325., 0.0089, color=color_biaxial, markeredgecolor='k', marker='*', markersize=10)
 
     # Zang et al. 2012 (wrinkling, numeric)
     plt.semilogx(836., 0.01, color=color_plane, markeredgecolor='k', marker='*', markersize=10)
-    
+
     # Tallinen et al. 2014 (numeric, surface)
     plt.semilogx(1., 0.224, color=color_surface, markeredgecolor='k', marker='^', markersize=8)
 
@@ -168,16 +179,24 @@ def data_strains(figname, color=True):
 
     # Tallinen & Biggins 2015 (numerical, prestretch)
     [betas, strains, wavelengths] = data_Tallinen2015()
-    plt.semilogx(betas, strains, linestyle='', color=set_mode_info('prestretch2D')[1], markeredgecolor='k', marker='*', markersize=10)
+    plt.semilogx(
+        betas,
+        strains,
+        linestyle='',
+        color=color_prestretch1D,
+        markeredgecolor='k',
+        marker='*',
+        markersize=10)
 
     # Budday et al. 2015 (numerical)
     plt.semilogx(5., 0.245, color=color_isotropic, markeredgecolor='k', marker='*', markersize=10)
     plt.semilogx(8., 0.159, color=color_isotropic, markeredgecolor='k', marker='*', markersize=10)
-    
+
     # Cai et al. 2011 (should be at 10,000)
     plt.semilogx(1000., 0.025, color=color_isotropic, markeredgecolor='k', marker='*', markersize=10)
-    
-def data_wavelength(figname, color=True): 
+
+
+def data_wavelength(figname, color=True):
     """ add wavelength datapoints to Fig 5B
 
     Parameters
@@ -193,22 +212,16 @@ def data_wavelength(figname, color=True):
 
     """
 
-    plt.figure(figname) 
+    plt.figure(figname)
 
-    if color: 
-        color_plane = set_mode_info('plane')[1]
-        color_uniaxial = set_mode_info('uniaxial')[1]
+    if color:
         color_biaxial = set_mode_info('biaxial')[1]
         color_surface = set_mode_info('surface')[1]
-        color_prestretch1D = set_mode_info('prestretch1D')[1]
         color_prestretch2D = set_mode_info('prestretch2D')[1]
         color_isotropic = set_mode_info('isotropic')[1]
-    else: 
-        color_plane = 'lightgray'
-        color_uniaxial = 'lightgray'
+    else:
         color_biaxial = 'lightgray'
         color_surface = 'lightgray'
-        color_prestretch1D = 'lightgray'
         color_prestretch2D = 'lightgray'
         color_isotropic = 'lightgray'
 
@@ -221,15 +234,23 @@ def data_wavelength(figname, color=True):
 
     # Tallinen & Biggins 2015 (numerical, prestretch)
     [betas, strains, wavelengths] = data_Tallinen2015()
-    plt.semilogx(betas, wavelengths, linestyle='', color=color_prestretch2D, markeredgecolor='k', marker='*', markersize=10)
-    
+    plt.semilogx(
+        betas,
+        wavelengths,
+        linestyle='',
+        color=color_prestretch2D,
+        markeredgecolor='k',
+        marker='*',
+        markersize=10)
+
     # Budday et al. 2014
     plt.semilogx(3., 10., color=color_isotropic, markeredgecolor='k', marker='*', markersize=10)
 
     # Sultan & Boudaoud 2008 (experimental, isotropic growth)
     plt.semilogx(3.4, 5.34, color=color_isotropic, markeredgecolor='k', marker='^', markersize=8)
-    
-def data_eff_strain(): 
+
+
+def data_eff_strain():
     """ add strain datapoints to Fig 7A
 
     Parameters
@@ -242,54 +263,55 @@ def data_eff_strain():
 
     """
 
-    plt.figure('7A') 
-    
+    plt.figure('7A')
+
     # Cao & Hutchinson 2012 (numerical, plane compression)
-    plot_eff_strain_data([5.], [0.175], 'plane', 'wrinkling') 
-    plot_eff_strain_data([30.], [0.055], 'plane', 'wrinkling') 
-    
+    plot_eff_strain_data([5.], [0.175], 'plane', 'wrinkling')
+    plot_eff_strain_data([30.], [0.055], 'plane', 'wrinkling')
+
     # Brau et al. 2011 (experimental, plane)
-    plot_eff_strain_data([120.], [0.17], 'plane', 'wrinkling') 
-    
+    plot_eff_strain_data([120.], [0.17], 'plane', 'wrinkling')
+
     # Auguste et al. 2014 (experimental)
-    plot_eff_strain_data([175.], [0.04], 'uniaxial', 'wrinkling')     
-    
+    plot_eff_strain_data([175.], [0.04], 'uniaxial', 'wrinkling')
+
     # Jin et al. 2015 (numerical, subcritical crease)
-    plot_eff_strain_data([1.4], [0.36], 'plane', 'cusping') 
+    plot_eff_strain_data([1.4], [0.36], 'plane', 'cusping')
     # Jin et al. 2015 (experimental, uniaxial subcritical creases)
-    plot_eff_strain_data([2.], [0.37], 'uniaxial', 'cusping') 
+    plot_eff_strain_data([2.], [0.37], 'uniaxial', 'cusping')
     # Jin et al. 2015 (experimental, uniaxial wrinkles)
-    plot_eff_strain_data([4.], [0.21], 'uniaxial', 'wrinkling') 
-    
+    plot_eff_strain_data([4.], [0.21], 'uniaxial', 'wrinkling')
+
     # Hong et al. 2009 (numeric, plane creasing)
-    plot_eff_strain_data([1.], [0.35], 'plane', 'cusping') 
+    plot_eff_strain_data([1.], [0.35], 'plane', 'cusping')
     # Hong et al. 2009 (numeric, uniaxial creasing)
-    plot_eff_strain_data([1.], [0.436], 'uniaxial', 'cusping') 
+    plot_eff_strain_data([1.], [0.436], 'uniaxial', 'cusping')
     # Hong et al. 2009 (numeric, biaxial creasing)
-    plot_eff_strain_data([1.], [0.249], 'biaxial', 'cusping') 
-    
+    plot_eff_strain_data([1.], [0.249], 'biaxial', 'cusping')
+
     # Huang et al. 2005 (numerical, biaxial) 
-    plot_eff_strain_data([325.], [0.0089], 'biaxial', 'wrinkling') 
+    plot_eff_strain_data([325.], [0.0089], 'biaxial', 'wrinkling')
 
     # Zang et al. 2012 (wrinkling, numeric)
-    plot_eff_strain_data([836.], [0.01], 'plane', 'wrinkling') 
-    
+    plot_eff_strain_data([836.], [0.01], 'plane', 'wrinkling')
+
     # Tallinen et al. 2014 (numeric, surface)
-    plot_eff_strain_data([1.], [0.224], 'surface', 'cusping') 
-    
+    plot_eff_strain_data([1.], [0.224], 'surface', 'cusping')
+
     # Tallinen & Biggins 2015 (numerical, prestretch)
-    plot_eff_strain_data([1.14], [0.354], 'prestretch1D', 'cusping') 
+    plot_eff_strain_data([1.14], [0.354], 'prestretch1D', 'cusping')
     [betas, strains, wavelengths] = data_Tallinen2015()
-    plot_eff_strain_data(betas, strains, 'prestretch2D', 'wrinkling') 
+    plot_eff_strain_data(betas, strains, 'prestretch2D', 'wrinkling')
 
     # Budday et al. 2015 (numerical)
-    plot_eff_strain_data([5.], [0.245], 'isotropic', 'wrinkling') 
-    plot_eff_strain_data([8.], [0.159], 'isotropic', 'wrinkling') 
-    
+    plot_eff_strain_data([5.], [0.245], 'isotropic', 'wrinkling')
+    plot_eff_strain_data([8.], [0.159], 'isotropic', 'wrinkling')
+
     # Cai et al. 2011 (should be at b=10,000)
-    plot_eff_strain_data([1000.], [0.025], 'isotropic', 'wrinkling') 
-    
-def data_eff_wavelength(): 
+    plot_eff_strain_data([1000.], [0.025], 'isotropic', 'wrinkling')
+
+
+def data_eff_wavelength():
     """ add wavelength datapoints to Fig 7B
 
     Parameters
@@ -302,18 +324,19 @@ def data_eff_wavelength():
 
     """
 
-    plt.figure('7B') 
+    plt.figure('7B')
 
     # Huang et al. 2005 (numeric, biaxial)
-    plot_eff_wavelength_data([325.], [29.16], [0.0089], 'biaxial', 'wrinkling') 
+    plot_eff_wavelength_data([325.], [29.16], [0.0089], 'biaxial', 'wrinkling')
 
     # Tallinen et al. 2014 (numeric, surface)
-    plot_eff_wavelength_data([1.], [4.36], [0.224], 'isotropic', 'wrinkling') 
+    plot_eff_wavelength_data([1.], [4.36], [0.224], 'isotropic', 'wrinkling')
 
     # Tallinen & Biggins 2015 (numerical, prestretch)
     [betas, strains, wavelengths] = data_Tallinen2015()
-    plot_eff_wavelength_data(betas, wavelengths, strains, 'prestretch2D', 'wrinkling') 
-    
+    plot_eff_wavelength_data(betas, wavelengths, strains, 'prestretch2D', 'wrinkling')
+
+
 def plot_curves(mode, figno, subfigno):
     """ find the min (and max) critical min_strains, and corresponding wavelengths and stiffness ratios
 
@@ -331,10 +354,10 @@ def plot_curves(mode, figno, subfigno):
     None
 
     """
-    
+
     [mode_type, loadcolor, functions] = set_mode_info(mode)
 
-    with open('data_betas.txt', 'r') as file_beta: 
+    with open('data_betas.txt', 'r') as file_beta:
         beta_strings = file_beta.readlines()
     with open('data_strain_{mode}.txt'.format(mode=mode)) as file_strain:
         strain_strings = file_strain.readlines()
@@ -347,7 +370,7 @@ def plot_curves(mode, figno, subfigno):
     plt.gca().set_ylim(0., 1.)
     plt.gca().set_xlim(0.1, 1000.)
 
-    for i in range(len(beta_strings)): 
+    for i in range(len(beta_strings)):
         beta = float(beta_strings[i])
 
         if beta in [0.1, 10., 100., 1000.]:
@@ -361,7 +384,8 @@ def plot_curves(mode, figno, subfigno):
         strains_all = [float(x) for x in strain_strings[i].split()]
 
         plt.semilogx(wavelengths_all, strains_all, color=loadcolor, linestyle='-', linewidth=width)
-    
+
+
 def plot_wavelengths(mode, figno, subfigno):
     """ Figs. 5B, 10B
 
@@ -413,52 +437,66 @@ def plot_wavelengths(mode, figno, subfigno):
 
     betas_nonzero = numpy.array(min_betas[start:])
     wavelengths_nonzero = numpy.array(min_wavelengths[start:])
+    crit_strains_nonzero = numpy.array(min_strains[start:])
 
     # plot threshold values on curve plots     
     plt.figure('{figno}_{subfigno}_{mode}'.format(figno=figno, subfigno=subfigno, mode=mode))
-
-    crit_strains_nonzero = min_strains[start:]
-    wavelengths_nonzero = min_wavelengths[start:]
     plt.semilogx(wavelengths_nonzero, crit_strains_nonzero, color='k', linestyle='-', linewidth=4, zorder=100)
 
     # add zero-wavelength and max threshold values as dotted lines
     if mode_type != 'FvK':
-        dotted_strains = numpy.append(max_strains,crit_strains_nonzero[0])
-        dotted_wavelengths = numpy.append(max_wavelengths,wavelengths_nonzero[0])
+        dotted_strains = numpy.append(max_strains, crit_strains_nonzero[0])
+        dotted_wavelengths = numpy.append(max_wavelengths, wavelengths_nonzero[0])
         plt.semilogx(dotted_wavelengths, dotted_strains, color='k', linestyle='--', linewidth=2, zorder=100)
 
-    if mode == 'prestretch2D': 
+    if mode == 'prestretch2D':
         data_Tallinen2015(figno, plot=True)
 
     # plt.xlabel('normalized wavelength')
     # plt.ylabel('critical strain')
     plt.savefig('{figno}_{subfigno}_{mode}.pdf'.format(figno=figno, subfigno=subfigno, mode=mode))
-   
+
     # slightly offset some curves so that they all show on the plot
     if mode in ['biaxial']:
         wavelengths_nonzero = wavelengths_nonzero + 0.5
     elif mode in ['plane']:
         wavelengths_nonzero = wavelengths_nonzero - 0.5
-    
-    if mode_type =='compression':
+
+    if mode_type == 'compression':
         width = 3
     else:
         width = 4
-    
-    plt.figure('5B') 
-    plt.semilogx(betas_nonzero, wavelengths_nonzero, color=loadcolor, linestyle='-', linewidth=width, label=mode + ' ' + mode_type)
+
+    plt.figure('5B')
+    plt.semilogx(
+        betas_nonzero,
+        wavelengths_nonzero,
+        color=loadcolor,
+        linestyle='-',
+        linewidth=width,
+        label=mode + ' ' + mode_type
+    )
+
     if mode_type == 'compression':
         all_wavelengths = numpy.append(max_wavelengths, wavelengths_nonzero[0])
         all_betas = numpy.append(max_betas, betas_nonzero[0])
         plt.semilogx(all_betas, all_wavelengths, color=loadcolor, linestyle='-', linewidth=1)
-    
-    plt.figure('10B') 
-    plt.semilogx(betas_nonzero, wavelengths_nonzero, color='lightgray', linestyle='-', linewidth=3, label=mode + ' ' + mode_type)
+
+    plt.figure('10B')
+    plt.semilogx(
+        betas_nonzero,
+        wavelengths_nonzero,
+        color='lightgray',
+        linestyle='-',
+        linewidth=3,
+        label=mode + ' ' + mode_type
+    )
+
     if mode_type == 'compression':
         plt.semilogx(all_betas, all_wavelengths, color='lightgray', linestyle='-', linewidth=1)
 
+    return min_wavelengths, min_strains
 
-    return min_wavelengths, min_strains    
 
 def plot_strains(mode, min_strains):
     """ Figs. 5A and 8
@@ -475,14 +513,14 @@ def plot_strains(mode, min_strains):
     None
 
     """
-    
+
     [mode_type, loadcolor, functions] = set_mode_info(mode)
 
-    with open('data_betas.txt', 'r') as file_beta: 
+    with open('data_betas.txt', 'r') as file_beta:
         beta_strings = file_beta.readlines()
     betas = [float(x) for x in beta_strings]
 
-    plt.figure('5A') # critical min_strains
+    plt.figure('5A')  # critical min_strains
     # slightly offset some curves so that they all show on the plot
     if mode in ['surface', 'unidirectional']:
         crit_strains_adjusted = numpy.array(min_strains) + 0.01
@@ -493,20 +531,28 @@ def plot_strains(mode, min_strains):
     else:
         crit_strains_adjusted = numpy.array(min_strains)
         width = 4
-    plt.semilogx(betas, crit_strains_adjusted, color=loadcolor, linestyle='-', linewidth=width, label=mode + ' ' + mode_type)
+    plt.semilogx(
+        betas,
+        crit_strains_adjusted,
+        color=loadcolor,
+        linestyle='-',
+        linewidth=width,
+        label=mode + ' ' + mode_type
+    )
 
-    plt.figure('10A') # critical min_strains
+    plt.figure('10A')  # critical min_strains
     plt.semilogx(betas, min_strains, color='lightgray', linestyle='-', linewidth=3, label=mode + ' ' + mode_type)
-    
-    if mode_type != 'FvK': 
-        plt.figure('8A') # critical axial pressure
+
+    if mode_type != 'FvK':
+        plt.figure('8A')  # critical axial pressure
         crit_pressure = calc_axial_pressure(mode, min_strains)
         plt.semilogx(betas, crit_pressure, color=loadcolor, linestyle='-', linewidth=4, label=mode + ' ' + mode_type)
 
-        plt.figure('8B') # critical hydrostatic pressure
+        plt.figure('8B')  # critical hydrostatic pressure
         crit_pressure = calc_hydro_pressure(mode, min_strains)
         plt.semilogx(betas, crit_pressure, color=loadcolor, linestyle='-', linewidth=4, label=mode + ' ' + mode_type)
-    
+
+
 def plot_eff_wavelength_strain(mode, min_wavelengths, min_strains, n):
     """ Fig. 7
 
@@ -529,16 +575,16 @@ def plot_eff_wavelength_strain(mode, min_wavelengths, min_strains, n):
 
     [mode_type, loadcolor, functions] = set_mode_info(mode)
 
-    with open('data_betas.txt', 'r') as file_beta: 
+    with open('data_betas.txt', 'r') as file_beta:
         beta_strings = file_beta.readlines()
     betas = [float(x) for x in beta_strings]
-    
+
     wavelength_eff = calc_eff_wavelength(mode_type, functions, min_strains, min_wavelengths)
     beta_eff = calc_eff_stiffness(mode_type, functions, min_strains, betas)
-    
+
     width = 3
-    
-    plt.figure('7B') 
+
+    plt.figure('7B')
     # slightly offset some curves so that they all show on the plot (plane, prestretch1D are left untouched)
     if mode in ['uniaxial', 'prestretch2D']:
         wavelength_eff = wavelength_eff + 0.4
@@ -551,14 +597,29 @@ def plot_eff_wavelength_strain(mode, min_wavelengths, min_strains, n):
 
     beta_eff_plot = numpy.insert(beta_eff, 0, 0.1)
     wavelength_eff_plot = numpy.insert(wavelength_eff, 0, wavelength_eff[0])
-    plt.semilogx(beta_eff_plot, wavelength_eff_plot, color=loadcolor, linestyle='-', linewidth=width, label=mode + ' ' + mode_type)
+    plt.semilogx(
+        beta_eff_plot,
+        wavelength_eff_plot,
+        color=loadcolor,
+        linestyle='-',
+        linewidth=width,
+        label=mode + ' ' + mode_type
+    )
 
-    plt.figure('7A') # effective min_strains and stiffness
+    plt.figure('7A')  # effective min_strains and stiffness
     beta_eff = calc_eff_stiffness(mode_type, functions, min_strains, betas)
     strains_eff = calc_eff_strain(mode_type, functions, min_strains)
     beta_eff_plot = numpy.insert(beta_eff, 0, 0.1)
     strains_eff_plot = numpy.insert(strains_eff, 0, strains_eff[0])
-    plt.semilogx(beta_eff_plot, strains_eff_plot + (n-4.) / 150., color=loadcolor, linestyle='-', linewidth=width, label=mode + ' ' + mode_type)
+    plt.semilogx(
+        beta_eff_plot,
+        strains_eff_plot + (n - 4.) / 150.,
+        color=loadcolor,
+        linestyle='-',
+        linewidth=width,
+        label=mode + ' ' + mode_type
+    )
+
 
 def plot_effective_measures(mode):
     """ Fig. 6
@@ -573,17 +634,17 @@ def plot_effective_measures(mode):
     None
 
     """
-    
+
     [mode_type, loadcolor, functions] = set_mode_info(mode)
 
     lams = numpy.linspace(0.1, 1.0, 50)
     length = 0.015
     width = 4
-    
+
     if mode_type == 'growth':
         [g_1, g_2, g_3] = functions
         [d_1, d_3] = [d_one, d_one]
-    else: # whole-domain compression does not affect stiffness ratio
+    else:  # whole-domain compression does not affect stiffness ratio
         [g_1, g_2, g_3] = [d_one, d_one, d_one]
         [d_1, d_3] = functions
 
@@ -602,30 +663,29 @@ def plot_effective_measures(mode):
         lam3 = d3 / g3
 
         if mode_type == 'growth':
-            beta_eff[i] = (lam1**2. + 1./(lam1*lam3)**2.)/2.
+            beta_eff[i] = (lam1 ** 2. + 1. / (lam1 * lam3) ** 2.) / 2.
         else:
             beta_eff[i] = 1.
 
-        wave_eff[i] = d1**2. * d3 / (g1*g2*g3)
+        wave_eff[i] = d1 ** 2. * d3 / (g1 * g2 * g3)
+        strain_eff[i] = 1. - lam1 * lam3 ** 0.5
 
-        strain_eff[i] = 1. - lam1*lam3**0.5
-    
-    plt.figure('6B') # curved effective stiffness lines
+    plt.figure('6B')  # curved effective stiffness lines
     if mode in ['unidirectional', 'surface']:
-        offset = 0.6*length
+        offset = 0.6 * length
     elif mode in ['isotropic']:
-        offset = 1.2*length
-    else: 
-        offset = 0.*length
+        offset = 1.2 * length
+    else:
+        offset = 0. * length
     strains = 1. - lams + offset
     if mode == 'plane':
         beta_eff = beta_eff - 0.03
     elif mode == 'biaxial':
         beta_eff = beta_eff + 0.02
     if mode_type == 'compression':
-        width=2
+        width = 2
     else:
-        width=3
+        width = 3
 
     plt.semilogy(strains, beta_eff, color=loadcolor, marker='', linestyle='-', linewidth=width)
     plt.gca().set_ylim(0.8, 100.)
@@ -634,19 +694,19 @@ def plot_effective_measures(mode):
     # plt.ylabel('effective stiffness')
     plt.savefig('6B_effective-stiffness.pdf')
 
-    plt.figure('6C') # curved effective wavelength lines
+    plt.figure('6C')  # curved effective wavelength lines
     if mode in ['isotropic', 'surface']:
-        offset = 0.8*length
+        offset = 0.8 * length
     else:
-        offset = 0.*length
+        offset = 0. * length
     strains = 1. - lams + offset
     if mode == 'prestretch2D':
         wave_eff = wave_eff + 0.008
     if mode in ['prestretch1D', 'prestretch2D']:
-        width=3
+        width = 3
     else:
-        width=4
-    
+        width = 4
+
     plt.plot(strains, wave_eff, color=loadcolor, marker='', linestyle='-', linewidth=width)
     plt.gca().set_xlim(0., 1.0)
     plt.gca().set_ylim(0., 1.2)
@@ -654,22 +714,23 @@ def plot_effective_measures(mode):
     # plt.ylabel('effective wavelength')
     plt.savefig('6C_effective-wavelength.pdf')
 
-    plt.figure('6A') # curved effective strain lines
-    width=4
+    plt.figure('6A')  # curved effective strain lines
+    width = 4
     if mode in ['prestretch1D', 'prestretch2D']:
-        offset = 1.*length
+        offset = 1. * length
     elif mode in ['unidirectional', 'surface', 'isotropic']:
-        offset = 2.*length
+        offset = 2. * length
     else:
-        offset = 0.*length
+        offset = 0. * length
     strains = 1. - lams + offset
-    
+
     plt.plot(strains, strain_eff, color=loadcolor, marker='', linestyle='-', linewidth=width)
     plt.gca().set_xlim(0., 1.)
     plt.gca().set_ylim(0., 1.)
     # plt.xlabel('axial strain')
     # plt.ylabel('effective wavelength')
     plt.savefig('6A_effective-strain.pdf')
+
 
 def plot_eff_strain_data(betas, strains, mode, instability):
     """ Add datapoints to Fig. 7A
@@ -707,6 +768,7 @@ def plot_eff_strain_data(betas, strains, mode, instability):
     plt.figure('7A')
     plt.semilogx(B_eff, e_eff, linestyle='', color=loadcolor, markeredgecolor='k', marker=symbol, markersize=size)
 
+
 def plot_eff_wavelength_data(betas, wavelengths, strains, mode, instability):
     """ 
 
@@ -728,7 +790,7 @@ def plot_eff_wavelength_data(betas, wavelengths, strains, mode, instability):
     None
 
     """
-    
+
     [mode_type, loadcolor, functions] = set_mode_info(mode)
 
     if instability == 'wrinkling':
@@ -744,7 +806,8 @@ def plot_eff_wavelength_data(betas, wavelengths, strains, mode, instability):
     plt.figure('7B')
     plt.semilogx(B_eff, lh_eff, linestyle='', color=loadcolor, markeredgecolor='k', marker=symbol, markersize=size)
 
-def plot_FvK_curves(FvK_mode, mode, figno): 
+
+def plot_FvK_curves(FvK_mode, mode, figno):
     """ plot critical strains, and corresponding wavelengths for FvK equations
 
     Parameters
@@ -761,7 +824,7 @@ def plot_FvK_curves(FvK_mode, mode, figno):
     None
 
     """
-    
+
     [mode_type, loadcolor, functions] = set_mode_info(FvK_mode)
 
     with open('data_min_{FvK_mode}.txt'.format(FvK_mode=FvK_mode), 'r') as file_min:
@@ -775,17 +838,18 @@ def plot_FvK_curves(FvK_mode, mode, figno):
     # plot threshold values on curve plots     
     plt.figure('9_{figno}_{mode}'.format(figno=figno, mode=mode))
 
-    if 'original' in FvK_mode: 
+    if 'original' in FvK_mode:
         linestyle = '--'
         loadcolor = 'gray'
-    else: 
+    else:
         linestyle = '-'
 
     plt.semilogx(min_wavelengths, min_strains, color=loadcolor, linestyle=linestyle, linewidth=2, zorder=10)
 
     plt.savefig('9_{figno}_{mode}.pdf'.format(figno=figno, mode=mode))
 
-def plot_FvK_strains_wavelengths(FvK_mode): 
+
+def plot_FvK_strains_wavelengths(FvK_mode):
     """ plot critical strains for FvK equations on Fig. 10A and critical wavelengths on Fig. 10B
 
     Parameters
@@ -798,12 +862,13 @@ def plot_FvK_strains_wavelengths(FvK_mode):
     None
 
     """
-    
+
     [mode_type, loadcolor, functions] = set_mode_info(FvK_mode)
-    if 'original' in FvK_mode: 
+
+    if 'original' in FvK_mode:
         loadcolor = 'k'
         linestyle = '--'
-    else: 
+    else:
         linestyle = '-'
 
     with open('data_min_{FvK_mode}.txt'.format(FvK_mode=FvK_mode), 'r') as file_min:
@@ -822,6 +887,7 @@ def plot_FvK_strains_wavelengths(FvK_mode):
     plt.figure('10B')
     plt.semilogx(min_betas, min_wavelengths, color=loadcolor, linestyle=linestyle, linewidth=4, zorder=100)
 
+
 def save_figures():
     """ Save figures
 
@@ -836,7 +902,7 @@ def save_figures():
     """
 
     plt.figure('5B')
-    plt.gca().xaxis.grid(b=True, which='major',color='k',linestyle='--')
+    plt.gca().xaxis.grid(b=True, which='major', color='k', linestyle='--')
     plt.gca().set_xlim(0.1, 1000)
     plt.gca().set_ylim(0., 45)
     # plt.title('Buckling Wavelengths for Different Stiffness Ratios')
@@ -845,8 +911,8 @@ def save_figures():
     # plt.legend(loc='best')
     plt.savefig('5B_critical-wavelengths.pdf')
 
-    plt.figure('5A') 
-    plt.gca().xaxis.grid(b=True, which='major',color='k',linestyle='--')
+    plt.figure('5A')
+    plt.gca().xaxis.grid(b=True, which='major', color='k', linestyle='--')
     plt.gca().set_xlim(0.1, 1000)
     plt.gca().set_ylim(0., 1.)
     # plt.title('Critical Strains for Different Stiffness Ratios')
@@ -855,10 +921,10 @@ def save_figures():
     # plt.legend(loc='best')
     plt.savefig('5A_critical-min_strains.pdf')
 
-    plt.figure('7B') 
+    plt.figure('7B')
     # plt.xlabel('effective stiffness ratio $\\beta_{eff}$')
     # plt.ylabel('effective wavelength l/h $')
-    plt.gca().xaxis.grid(b=True, which='major',color='k',linestyle='--')
+    plt.gca().xaxis.grid(b=True, which='major', color='k', linestyle='--')
     plt.gca().set_xlim(0.1, 1000)
     plt.gca().set_ylim(0., 45.)
     plt.savefig('7B_effective-wavelengths.pdf')
@@ -866,11 +932,11 @@ def save_figures():
     plt.figure('7A')
     # plt.xlabel('effective stiffness ratio $\\beta_{eff}$')
     # plt.ylabel('critical effective strain $\\epsilon_{eff}$')
-    plt.gca().xaxis.grid(b=True, which='major',color='k',linestyle='--')
+    plt.gca().xaxis.grid(b=True, which='major', color='k', linestyle='--')
     plt.gca().set_xlim(0.1, 1000)
     plt.gca().set_ylim(0., 1.)
-    plt.axhline(y=0.35,  color='k',linestyle='-',linewidth=2) # creasing
-    plt.axhline(y=0.4563,color='k',linestyle='--',linewidth=2) # Biot
+    plt.axhline(y=0.35, color='k', linestyle='-', linewidth=2)  # creasing
+    plt.axhline(y=0.4563, color='k', linestyle='--', linewidth=2)  # Biot
     plt.savefig('7A_effective-min_strains.pdf')
 
     plt.figure('8A')
@@ -896,6 +962,7 @@ def save_figures():
     plt.figure('10B')
     plt.gca().set_ylim(0.0, 45.0)
     plt.savefig('10B_FvK_wavelengths.pdf')
+
 
 def write_results(mode, min_strains, min_wavelengths):
     """ Write results for given mode_type of loading
@@ -923,7 +990,7 @@ def write_results(mode, min_strains, min_wavelengths):
 
     [mode_type, loadcolor, functions] = set_mode_info(mode)
 
-    with open('data_betas.txt', 'r') as file_beta: 
+    with open('data_betas.txt', 'r') as file_beta:
         beta_strings = file_beta.readlines()
     betas = [float(x) for x in beta_strings]
 
@@ -932,13 +999,16 @@ def write_results(mode, min_strains, min_wavelengths):
     # find b_wrinkle, stiffness below which wrinkling instability is not energetically favorable
     for i in range(len(betas)):
         if min_wavelengths[i] != 0:
-            b_wrinkle = betas[i-1]
+            b_wrinkle = betas[i - 1]
             break
     # plt.axvline(x=b_wrinkle,color=loadcolor,linestyle='--')
 
     # find critical strain for zero-wavelength instability
     strain_zw = min_strains[0]
-    f.write("zero wavelength instability occurs at strain = {strain:0.4f}, at and below b = {beta:0.4f} \n".format(strain=strain_zw, beta=b_wrinkle))
+    f.write("zero wavelength instability occurs at strain = {strain:0.4f}, at and below b = {beta:0.4f} \n".format(
+        strain=strain_zw,
+        beta=b_wrinkle
+    ))
 
     # find stiffness at which infinitesimal cusped sulci occurs first (from Mahdevan & Hohlfield, via Tallinen)
     stretch_sulci = 0.647
@@ -949,11 +1019,13 @@ def write_results(mode, min_strains, min_wavelengths):
 
     for i in range(len(min_strains)):
         if eff_crit_strains[i] < strain_sulci and i != 0:
-            b_sulci = (betas[i]+betas[i-1])/2.
+            b_sulci = (betas[i] + betas[i - 1]) / 2.
             # plt.axvline(x=b_sulci, ymax=strain_sulci, color=loadcolor, linestyle='-.')
             break
-            
-    f.write("infinitesimal cusped sulci occur at strain = {strain:0.4f}, at and below b = {beta:0.4f} \n\n".format(strain=min_strains[i], beta=b_sulci))
+
+    f.write("infinitesimal cusped sulci occur at strain = {strain:0.4f}, at and below b = {beta:0.4f} \n\n".format(
+        strain=min_strains[i],
+        beta=b_sulci
+    ))
 
     f.close()
-
